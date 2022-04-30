@@ -1,4 +1,4 @@
-const API_BASE = "/api";
+const API_BASE = "https://lifx-lamp-api.azurewebsites.net/api";
 
 // define variables
 const app = document.getElementById("app");
