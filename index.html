@@ -8,7 +8,7 @@
     <meta name="og:description" content="I LOVE LAMP" />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
     />
     <title>I LOVE LAMP</title>
     <style>
@@ -17,7 +17,6 @@
         background-repeat: no-repeat;
         background-size: cover;
         height: 100%;
-        min-height: 1400px;
       }
 
       body {
@@ -27,6 +26,14 @@
 
       #app {
         max-width: 800px;
+        display: none;
+        height: 100vh;
+      }
+
+      #login {
+        display: none;
+        width: 600px;
+        margin: auto;
       }
 
       #lightBulb {
@@ -37,9 +44,6 @@
   </head>
   <body>
     <div id="app" class="container">
-      <div class="has-text-centered">
-        <img src="images/logo.png" alt="" />
-      </div>
       <section class="section">
         <div class="columns is-vcentered">
           <div class="column is-10">
@@ -56,14 +60,16 @@
             </a>
           </div>
         </div>
+        <p class="is-size-6 has-text-centered" id="currentColor"></p>
       </section>
-      <section class="section">
+      <section>
         <div id="lightBulb">
+          <label class="label" id="userName"></label>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
             width="478px"
-            height="840px"
+            height="440px"
             version="1.1"
             viewBox="0 0 478 840"
           >
@@ -164,11 +170,26 @@
               />
             </g>
           </svg>
-          <p class="is-size-1 has-text-centered" id="currentColor"></p>
+          <div class="has-text-centered">
+            <a id="logout" class="button mt-4" href="/.auth/logout">Log
+              out</a>
+          </div>
         </div>
       </section>
     </div>
-    <script src="vendor/signalr.min.js"></script>
+    <div id="login" class="hero is-fullheight">
+      <div class="hero-body">
+        <div class="container m-6">
+          <div class="box has-text-centered">
+            <h1 class="is-size-3">Login with</h1>
+            <a href="/.auth/login/twitter" class="button">Twitter</a>
+            <a href="/.auth/login/github" class="button">GitHub</a>
+            <a href="/.auth/login/facebook" class="button">Facebook</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.4/signalr.min.js"></script>
     <script src="src/app.js"></script>
   </body>
 </html>

@@ -1,35 +1,62 @@
-const API_BASE = "https://lifx-lamp-api.azurewebsites.net/api";
+const API_BASE = "/api";
 
 // define variables
-let app = document.getElementById("app");
-let goButton = document.getElementById("goButton");
-let colorInput = document.getElementById("colorInput");
-let currentColor = document.getElementById("currentColor");
-let bulb = document.getElementById("bulb");
+const app = document.getElementById("app");
+const login = document.getElementById("login");
+const goButton = document.getElementById("goButton");
+const colorInput = document.getElementById("colorInput");
+const currentColor = document.getElementById("currentColor");
+const bulb = document.getElementById("bulb");
+let userName = null;
 
 class App {
   /**
    * Initalize the page and websocket connection
    */
-  async init() {
-    // initialize signalR hub (websockets connection)
-    let connection = new signalR.HubConnectionBuilder()
-      .withUrl(API_BASE)
-      .build();
+  async init() {  
 
-    // receives the "colorChanged" web socket event
-    connection.on("colorChanged", hex => {
-      // add a color circle
-      this.updateColor(hex);
-    });
+    // are we logged in?
+    await this.checkLogin();
 
-    // start the websocket connection
-    await connection.start();
+    if (userName) {
+      // show the app
+      app.style.display = "block";
 
-    goButton.addEventListener("click", async () => {
-      const color = colorInput.value;
-      this.setColor(color);
-    });
+      // initialize signalR hub (websockets connection)
+      let connection = new signalR.HubConnectionBuilder()
+        .withUrl(API_BASE)
+        .build();
+
+      // receives the "colorChanged" web socket event
+      connection.on("colorChanged", (hex, userName) => {
+        // add a color circle
+        this.updateColor(hex, userName);
+      });
+
+      // start the websocket connection
+      await connection.start();
+
+      goButton.addEventListener("click", async () => {
+        const color = colorInput.value;
+        this.setColor(color);
+      });
+    }
+    else {
+      // show the login
+      login.style.display = "block";
+    }
+  }
+
+  /**
+   * Checks to see if the user is logged in
+   * 
+   */
+  async checkLogin() {
+    const res = await fetch("/.auth/me");
+    const json = await res.json();
+    if (json.clientPrincipal) {
+      userName = json.clientPrincipal.userDetails;
+    }
   }
 
   /**
@@ -38,7 +65,7 @@ class App {
    */
   async setColor(color) {
     await fetch(
-      `${API_BASE}/setColor?color=${color.substring(1, color.length)}`
+      `${API_BASE}/setColor?color=${color.substring(1, color.length)}&userName=${userName}`
     );
   }
 
@@ -47,10 +74,10 @@ class App {
    * the color of the bulb
    * @param {string} color
    */
-  updateColor(color) {
+  updateColor(color, userName) {
     // add a color circle
     bulb.style = `fill: #${color};`;
-    currentColor.textContent = `#${color}`;
+    currentColor.innerHTML = `<strong>${userName}</strong> set the color to <span class='has-background-white p-1' style='color: #${color}'>${color}</span>`
   }
 
   /**
