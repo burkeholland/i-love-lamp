@@ -1,5 +1,3 @@
-const API_BASE = "https://lifx-lamp-api.azurewebsites.net/api";
-
 // define variables
 const app = document.getElementById("app");
 const login = document.getElementById("login");
@@ -24,7 +22,7 @@ class App {
 
       // initialize signalR hub (websockets connection)
       let connection = new signalR.HubConnectionBuilder()
-        .withUrl(API_BASE)
+        .withUrl("/api")
         .build();
 
       // receives the "colorChanged" web socket event
@@ -65,7 +63,7 @@ class App {
    */
   async setColor(color) {
     await fetch(
-      `${API_BASE}/setColor?color=${color.substring(1, color.length)}&userName=${userName}`
+      `/api/setColor?color=${color.substring(1, color.length)}&userName=${userName}`
     );
   }
 
