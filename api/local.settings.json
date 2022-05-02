@@ -1,9 +1,0 @@
-{
-  "IsEncrypted": false,
-  "Values": {
-    "AzureWebJobsStorage": "",
-    "FUNCTIONS_WORKER_RUNTIME": "node",
-    "AzureSignalRConnectionString": "Endpoint=https://lifxlamp.service.signalr.net;AccessKey=xjUESPWWwTDba4q1obnwr+HzyEeydax9QeMEGYhr0FU=;Version=1.0;",
-    "LIFX_TOKEN": "cf42d7adaa54b588fb0341500f0337246dd9703b26f6331042f8966b53a4a41a"
-  }
-}
