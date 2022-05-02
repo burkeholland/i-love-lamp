@@ -41,7 +41,7 @@ class App {
     }
     else {
       // show the login
-      login.style.display = "block";
+      login.style.visibility = "visible";
     }
   }
 

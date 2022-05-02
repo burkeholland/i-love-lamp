@@ -16,12 +16,10 @@
         background-image: url(images/background.jpeg);
         background-repeat: no-repeat;
         background-size: cover;
-        height: 100%;
       }
 
       body {
         background-color: RGBA(255, 255, 255, 0.8);
-        height: 100%;
       }
 
       #app {
@@ -30,14 +28,14 @@
         height: 100vh;
       }
 
-      #login {
-        display: none;
-        width: 600px;
+      #lightBulb {
+        width: 365px;
         margin: auto;
       }
 
-      #lightBulb {
-        width: 365px;
+      #login {
+        visibility: hidden;
+        max-width: 600px;
         margin: auto;
       }
     </style>
@@ -177,18 +175,18 @@
         </div>
       </section>
     </div>
-    <div id="login" class="hero is-fullheight">
-      <div class="hero-body">
+    <section id="login" class="hero is-fullheight">
+      <div class="hero-body has-text-centered">
         <div class="container m-6">
           <div class="box has-text-centered">
-            <h1 class="is-size-3">Login with</h1>
-            <a href="/.auth/login/twitter" class="button">Twitter</a>
-            <a href="/.auth/login/github" class="button">GitHub</a>
-            <a href="/.auth/login/facebook" class="button">Facebook</a>
+            <h1 class="is-size-3">Login</h1>
+            <a href="/.auth/login/twitter" class="button is-fullwidth">Twitter</a>
+            <a href="/.auth/login/github" class="button is-fullwidth mt-2">GitHub</a>
+            <a href="/.auth/login/facebook" class="button is-fullwidth mt-2">Facebook</a>
           </div>
         </div>
       </div>
-    </div>
+    </section>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.4/signalr.min.js"></script>
     <script src="src/app.js"></script>
   </body>
