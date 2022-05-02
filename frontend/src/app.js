@@ -17,8 +17,9 @@ class App {
     await this.checkLogin();
 
     if (userName) {
-      // show the app
+      // show the app / hide the login
       app.style.display = "block";
+      login.style.display = "none";
 
       // initialize signalR hub (websockets connection)
       let connection = new signalR.HubConnectionBuilder()
@@ -40,7 +41,8 @@ class App {
       });
     }
     else {
-      // show the login
+      // show the login - it's hidden by default to avoid
+      // it flashing briefly while the authentication is checked
       login.style.visibility = "visible";
     }
   }
