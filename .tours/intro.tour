@@ -1,0 +1,36 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Intro",
+  "steps": [
+    {
+      "file": "frontend/index.html",
+      "description": "Welcome to I Love Lamp. Let me show you around...\n\nThis project has two folders - \"frontend\" and \"api\". The frontend consists of an HTML file, a CSS file and a JavaScript file. The api folder contains the API for this project.",
+      "line": 1
+    },
+    {
+      "file": "frontend/src/app.js",
+      "description": "This is the one and only JavaScript file for the frontend. There are no frameworks used - just vanilla JavaScript. All of the code executed on the frontend can be found in this file.",
+      "line": 1
+    },
+    {
+      "file": "frontend/src/style.css",
+      "description": "This is the one and only CSS file. The project uses the Bulma CSS framework, so these styles are just tweaks. You can find the linked Bulma file in the head of the index.html page.",
+      "line": 1
+    },
+    {
+      "file": "api/negotiate/index.js",
+      "description": "This is the API!\n\nThis function sets up a web socket connection with SignalR. This is what the app uses to update the bulb color for everyone who is currently on the page. This function is just boilerplate - nothing to really see here.",
+      "line": 1
+    },
+    {
+      "file": "api/setColor/index.js",
+      "description": "This api endpoint does most of the work. It sends a message to the LIFX API to change the lamp color and includes the access token in the header. It also sends a message to the SignalR hub that the color has changed so that SignalR can notify all clients.",
+      "line": 1
+    },
+    {
+      "file": "frontend/staticwebapp.config.json",
+      "description": "This is the routing file for Static Web Apps. It locks down the \"setColor\" API method so that only authenticated users can call it. It also adds a simple redirect for the logout.",
+      "line": 1
+    }
+  ]
+}
