@@ -5,7 +5,7 @@ const goButton = document.getElementById("goButton");
 const colorInput = document.getElementById("colorInput");
 const currentColor = document.getElementById("currentColor");
 const bulb = document.getElementById("bulb");
-let userName = null;
+let clientPrincipal = null;
 
 class App {
   /**
@@ -14,9 +14,9 @@ class App {
   async init() {  
 
     // are we logged in?
-    await this.checkLogin();
+    clientPrincipal = await this.checkLogin();
 
-    if (userName) {
+    if (clientPrincipal) {
       // show the app / hide the login
       app.style.display = "block";
       login.style.display = "none";
@@ -27,9 +27,9 @@ class App {
         .build();
 
       // receives the "colorChanged" web socket event
-      connection.on("colorChanged", (hex, userName) => {
+      connection.on("colorChanged", (hex, userName, identityProvider) => {
         // add a color circle
-        this.updateColor(hex, userName);
+        this.updateColor(hex, userName, identityProvider);
       });
 
       // start the websocket connection
@@ -55,7 +55,10 @@ class App {
     const res = await fetch("/.auth/me");
     const json = await res.json();
     if (json.clientPrincipal) {
-      userName = json.clientPrincipal.userDetails;
+      return json.clientPrincipal;
+    }
+    else {
+      return null;
     }
   }
 
@@ -65,7 +68,7 @@ class App {
    */
   async setColor(color) {
     await fetch(
-      `/api/setColor?color=${color.substring(1, color.length)}&userName=${userName}`
+      `/api/setColor?color=${color.substring(1, color.length)}&userName=${clientPrincipal.userDetails}&identityProvider=${clientPrincipal.identityProvider}`
     );
   }
 
@@ -74,10 +77,12 @@ class App {
    * the color of the bulb
    * @param {string} color
    */
-  updateColor(color, userName) {
+  updateColor(color, userName, identityProvider) {
     // add a color circle
     bulb.style = `fill: #${color};`;
-    currentColor.innerHTML = `<strong>${userName}</strong> set the color to <span class='has-background-white p-1' style='color: #${color}'>${color}</span>`
+    let displayName = clientPrincipal.userRoles.indexOf('admin') > -1 ? identityProvider : userName;
+    console.log(identityProvider);
+    currentColor.innerHTML = `<strong>${displayName}</strong> user set the color to <span class='has-background-white p-1' style='color: #${color}'>${color}</span>`
   }
 
   /**

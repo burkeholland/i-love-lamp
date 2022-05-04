@@ -1,0 +1,32 @@
+
+html {
+    background-image: url(../images/background.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  body {
+    background-color: RGBA(255, 255, 255, 0.8);
+  }
+
+  #app {
+    max-width: 800px;
+    display: none;
+    height: 100vh;
+  }
+
+  #lightBulb {
+    width: 365px;
+    margin: auto;
+  }
+
+  /* how do i transition the fill property in css? */
+  #bulb {
+
+  }
+
+  #login {
+    visibility: hidden;
+    max-width: 600px;
+    margin: auto;
+  }

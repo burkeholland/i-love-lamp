@@ -8,16 +8,17 @@ const config = {
 
 module.exports = async function (context, req) {
   let newColor = req.query.color;
+  let identityProvider = req.query.identityProvider;
   let userName = req.query.userName;
     if (newColor) {
       try {
-        const res = await axios.put('https://api.lifx.com/v1/lights/label:Lamp/state', { color: newColor }, config)
+        const res = await axios.put('${process.env.LIFX_API}/state', { color: newColor }, config)
         context.res = {
           body: "OK"
         };
         context.bindings.signalRMessage = {
           target: 'colorChanged',
-          arguments: [ newColor, userName ]
+          arguments: [ newColor, userName, identityProvider ]
         };
       }
       catch (err) {
