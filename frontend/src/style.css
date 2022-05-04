@@ -11,7 +11,6 @@ html {
 
   #app {
     max-width: 800px;
-    display: none;
     height: 100vh;
   }
 
@@ -20,13 +19,35 @@ html {
     margin: auto;
   }
 
-  /* how do i transition the fill property in css? */
-  #bulb {
-
+  #colorControl {
+    display: none;
   }
 
   #login {
     visibility: hidden;
-    max-width: 600px;
     margin: auto;
+  }
+
+  #logoutButton {
+    display: none;
+  }
+
+  #googleButton{
+    background-color: #c84130;
+    color: #fff;
+  }
+
+  #twitterButton{
+    background-color: #52a7e6;
+    color: #fff;
+  }
+  
+  #facebookButton{
+    background-color: #3f64ac;
+    color: #fff;
+  }
+  
+  #githubButton{
+    background-color: #23282c;
+    color: #fff;
   }

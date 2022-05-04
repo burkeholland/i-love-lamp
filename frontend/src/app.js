@@ -1,64 +1,66 @@
+let $ = document.querySelector.bind(document);
+
 // define variables
-const app = document.getElementById("app");
-const login = document.getElementById("login");
-const goButton = document.getElementById("goButton");
-const colorInput = document.getElementById("colorInput");
-const currentColor = document.getElementById("currentColor");
-const bulb = document.getElementById("bulb");
+const app = $("#app");
+const login = $("#login");
+const goButton = $("#goButton");
+const colorInput = $("#colorInput");
+const currentColor = $("#currentColor");
+const bulb = $("#bulb");
+const colorControl = $("#colorControl");
+const logoutButton = $("#logoutButton");
 let clientPrincipal = null;
 
 class App {
+  presentationMode = localStorage.getItem("presentationMode") || false;
   /**
    * Initalize the page and websocket connection
    */
-  async init() {  
-
+  async init() {
     // are we logged in?
-    clientPrincipal = await this.checkLogin();
+    await this.setLoginState();
 
-    if (clientPrincipal) {
-      // show the app / hide the login
-      app.style.display = "block";
-      login.style.display = "none";
+    // initialize signalR hub (websockets connection)
+    let connection = new signalR.HubConnectionBuilder().withUrl("/api").build();
 
-      // initialize signalR hub (websockets connection)
-      let connection = new signalR.HubConnectionBuilder()
-        .withUrl("/api")
-        .build();
+    // receives the "colorChanged" web socket event
+    connection.on("colorChanged", (hex, userName, identityProvider) => {
+      // add a color circle
+      this.updateColor(hex, userName, identityProvider);
+    });
 
-      // receives the "colorChanged" web socket event
-      connection.on("colorChanged", (hex, userName, identityProvider) => {
-        // add a color circle
-        this.updateColor(hex, userName, identityProvider);
-      });
+    // start the websocket connection
+    await connection.start();
 
-      // start the websocket connection
-      await connection.start();
+    goButton.addEventListener("click", async () => {
+      const color = colorInput.value;
+      this.setColor(color);
+    });
 
-      goButton.addEventListener("click", async () => {
-        const color = colorInput.value;
-        this.setColor(color);
-      });
-    }
-    else {
-      // show the login - it's hidden by default to avoid
-      // it flashing briefly while the authentication is checked
-      login.style.visibility = "visible";
-    }
+    // double-clicking the bulb puts the app in presentation mode
+    // where usernames will not be shown
+    bulb.addEventListener("dblclick", () => {
+      this.presentationMode = !this.presentationMode;
+      localStorage.setItem("presentationMode", this.presentationMode);
+      alert(`Presentation mode is ${this.presentationMode ? "ON" : "OFF"}`);
+    });
   }
 
   /**
    * Checks to see if the user is logged in
-   * 
+   *
    */
-  async checkLogin() {
+  async setLoginState() {
     const res = await fetch("/.auth/me");
     const json = await res.json();
     if (json.clientPrincipal) {
-      return json.clientPrincipal;
-    }
-    else {
-      return null;
+      clientPrincipal = json.clientPrincipal;
+      login.style.display = "none";
+      logoutButton.style.display = "inline";
+      colorControl.style.display = "flex";
+    } else {
+      login.style.visibility = "visible";
+      logoutButton.style.display = "none";
     }
   }
 
@@ -68,7 +70,9 @@ class App {
    */
   async setColor(color) {
     await fetch(
-      `/api/setColor?color=${color.substring(1, color.length)}&userName=${clientPrincipal.userDetails}&identityProvider=${clientPrincipal.identityProvider}`
+      `/api/setColor?color=${color.substring(1, color.length)}&userName=${
+        clientPrincipal.userDetails
+      }&identityProvider=${clientPrincipal.identityProvider}`
     );
   }
 
@@ -80,9 +84,8 @@ class App {
   updateColor(color, userName, identityProvider) {
     // add a color circle
     bulb.style = `fill: #${color};`;
-    let displayName = clientPrincipal.userRoles.indexOf('admin') > -1 ? identityProvider : userName;
-    console.log(identityProvider);
-    currentColor.innerHTML = `<strong>${displayName}</strong> user set the color to <span class='has-background-white p-1' style='color: #${color}'>${color}</span>`
+    let displayName = this.presentationMode ? identityProvider : userName;
+    currentColor.innerHTML = `<strong>${displayName}</strong> user set the color to <span class='has-background-white p-1' style='color: #${color}'>${color}</span>`;
   }
 
   /**

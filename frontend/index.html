@@ -10,14 +10,46 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
     />
-    <link rel="stylesheet" href="src/style.css">
+    <link rel="stylesheet" href="src/style.css" />
     <title>I LOVE LAMP</title>
   </head>
   <body>
     <div id="app" class="container">
       <section class="section">
-        <div class="columns is-vcentered">
-          <div class="column is-10">
+        <div id="login" class="mb-4">
+          <div class="has-text-centered">
+            <h1 class="is-size-3">Login</h1>
+            to change the bulb color
+            <p>
+              <a
+                id="googleButton"
+                href="/.auth/login/google"
+                class="button mt-2"
+                >Google</a
+              >
+              <a
+                id="twitterButton"
+                href="/.auth/login/twitter"
+                class="button mt-2"
+                >Twitter</a
+              >
+              <a
+                id="githubButton"
+                href="/.auth/login/github"
+                class="button mt-2"
+                >GitHub</a
+              >
+              <a
+                id="facebookButton"
+                href="/.auth/login/facebook"
+                class="button mt-2"
+                >Facebook</a
+              >
+            </p>
+          </div>
+        </div>
+        <div class="columns is-vcentered" id="colorControl">
+          <div class="column is-11">
             <input
               id="colorInput"
               class="input is-large"
@@ -26,7 +58,7 @@
             />
           </div>
           <div class="column">
-            <a id="goButton" class="button is-large is-fullwidth is-primary">
+            <a id="goButton" class="button is-large is-primary is-fullwidth">
               Go
             </a>
           </div>
@@ -141,25 +173,12 @@
               />
             </g>
           </svg>
-          <div class="has-text-centered">
-            <a id="logout" class="button mt-4" href="/logout">Log
-              out</a>
-          </div>
         </div>
       </section>
-    </div>
-    <section id="login" class="hero is-fullheight">
-      <div class="hero-body has-text-centered">
-        <div class="container m-6">
-          <div class="box has-text-centered">
-            <h1 class="is-size-3">Login</h1>
-            <a href="/.auth/login/twitter" class="button is-fullwidth">Twitter</a>
-            <a href="/.auth/login/github" class="button is-fullwidth mt-2">GitHub</a>
-            <a href="/.auth/login/facebook" class="button is-fullwidth mt-2">Facebook</a>
-          </div>
-        </div>
+      <div class="has-text-centered mt-4">
+        <a id="logoutButton" class="button is-large" href="/logout">Log out</a>
       </div>
-    </section>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.4/signalr.min.js"></script>
     <script src="src/app.js"></script>
   </body>
