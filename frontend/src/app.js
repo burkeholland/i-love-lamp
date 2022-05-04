@@ -56,7 +56,7 @@ class App {
     if (json.clientPrincipal) {
       clientPrincipal = json.clientPrincipal;
       login.style.display = "none";
-      logoutButton.style.display = "inline";
+      logoutButton.style.display = "inline-flex";
       colorControl.style.display = "flex";
     } else {
       login.style.visibility = "visible";
