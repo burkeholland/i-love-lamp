@@ -9,10 +9,13 @@ const currentColor = $("#currentColor");
 const bulb = $("#bulb");
 const colorControl = $("#colorControl");
 const logoutButton = $("#logoutButton");
+const togglePresenterModeButton = $("#togglePresenterModeButton");
 let clientPrincipal = null;
 
 class App {
-  presentationMode = localStorage.getItem("presentationMode") || false;
+  presentationMode = this.setPresenterMode(
+    localStorage.getItem("presentationMode")
+  );
   /**
    * Initalize the page and websocket connection
    */
@@ -37,13 +40,17 @@ class App {
       this.setColor(color);
     });
 
-    // double-clicking the bulb puts the app in presentation mode
-    // where usernames will not be shown
-    bulb.addEventListener("dblclick", () => {
-      this.presentationMode = !this.presentationMode;
-      localStorage.setItem("presentationMode", this.presentationMode);
-      alert(`Presentation mode is ${this.presentationMode ? "ON" : "OFF"}`);
+    togglePresenterModeButton.addEventListener("click", () => {
+      this.setPresenterMode(!this.presentationMode);
     });
+  }
+
+  setPresenterMode(value) {
+    this.presentationMode = value;
+    localStorage.setItem("presentationMode", this.presentationMode);
+    togglePresenterModeButton.textContent = `Presenter Mode : ${
+      this.presentationMode ? "ON" : "OFF"
+    }`;
   }
 
   /**
@@ -83,9 +90,11 @@ class App {
    */
   updateColor(color, userName, identityProvider) {
     // add a color circle
-    bulb.style = `fill: #${color};`;
-    let displayName = this.presentationMode ? identityProvider : userName;
-    currentColor.innerHTML = `<strong>${displayName}</strong> user set the color to <span class='has-background-white p-1' style='color: #${color}'>${color}</span>`;
+    // bulb.style = `fill: #${color};`;
+    let displayName = this.presentationMode
+      ? `${identityProvider} user`
+      : userName;
+    currentColor.innerHTML = `<strong>${displayName}</strong> set the color to <span class='is-bold' style='color: #${color}'>${color}</span>`;
   }
 
   /**
