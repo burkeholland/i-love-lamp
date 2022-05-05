@@ -46,7 +46,7 @@ class App {
   }
 
   setPresenterMode(value) {
-    this.presentationMode = value;
+    this.presentationMode = value || false;
     localStorage.setItem("presentationMode", this.presentationMode);
     togglePresenterModeButton.textContent = `Presenter Mode : ${
       this.presentationMode ? "ON" : "OFF"
