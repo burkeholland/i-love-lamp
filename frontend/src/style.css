@@ -53,13 +53,7 @@ html {
   }
 
   #currentColor {
-    position: absolute;
-    padding: 20px;
     width: 100%;
-    opacity: .8;
-    background-color: white;
-    bottom: 0;
-    z-index: 99999;
   }
 
   #livestreamWrapper {

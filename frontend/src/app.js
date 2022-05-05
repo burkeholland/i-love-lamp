@@ -6,7 +6,6 @@ const login = $("#login");
 const goButton = $("#goButton");
 const colorInput = $("#colorInput");
 const currentColor = $("#currentColor");
-const bulb = $("#bulb");
 const colorControl = $("#colorControl");
 const logoutButton = $("#logoutButton");
 const togglePresenterModeButton = $("#togglePresenterModeButton");
@@ -94,22 +93,25 @@ class App {
     let displayName = this.presentationMode
       ? `${identityProvider} user`
       : userName;
-    currentColor.innerHTML = `<strong>${displayName}</strong> set the color to <span class='is-bold' style='color: #${color}'>${color}</span>`;
+    let today = this.getToday();
+    currentColor.innerHTML = `<strong>${displayName}</strong> set the color to <span class='is-bold' style='color: #${color}'>${color}</span> on ${today}`;
   }
 
   /**
-   * Creates the color circle HTML element
-   * @param {string} color
+   *
+   * Formatting dates in JavaScript is so long that getting the current
+   * date and time merits its own function
+   * @returns string
    */
-  createColumn(color) {
-    let column = document.createElement("div");
-    column.className = "column is-1 pastColor drop";
-    column.style = `background-color: #${color}`;
-    column.addEventListener("click", () => {
-      this.setColor(color);
+  getToday() {
+    let date = new Date().toLocaleDateString("en-us", {
+      weekday: "long",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
-
-    return column;
+    let time = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`;
+    return `${date} at ${time}`;
   }
 }
 
