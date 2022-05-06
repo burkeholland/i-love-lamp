@@ -8,17 +8,19 @@ const colorInput = $("#colorInput");
 const currentColor = $("#currentColor");
 const colorControl = $("#colorControl");
 const logoutButton = $("#logoutButton");
-const togglePresenterModeButton = $("#togglePresenterModeButton");
+const presenterModeAnchor = $("#presenterModeAnchor");
+const presenterModeSpan = $("#presenterModeSpan");
 let clientPrincipal = null;
 
 class App {
-  presentationMode = this.setPresenterMode(
-    localStorage.getItem("presentationMode")
-  );
+  presentationMode = localStorage.getItem("presentationMode");
   /**
    * Initalize the page and websocket connection
    */
   async init() {
+    // are we in presentation mode?
+    presenterModeSpan.textContent = this.presentationMode ? "ON" : "OFF";
+
     // are we logged in?
     await this.setLoginState();
 
@@ -39,17 +41,12 @@ class App {
       this.setColor(color);
     });
 
-    togglePresenterModeButton.addEventListener("click", () => {
-      this.setPresenterMode(!this.presentationMode);
+    presenterModeAnchor.addEventListener("click", (e) => {
+      this.presentationMode = !this.presentationMode;
+      localStorage.setItem("presentationMode", this.presentationMode);
+      presenterModeSpan.textContent = this.presentationMode ? "ON" : "OFF";
+      e.preventDefault();
     });
-  }
-
-  setPresenterMode(value) {
-    this.presentationMode = value || false;
-    localStorage.setItem("presentationMode", this.presentationMode);
-    togglePresenterModeButton.textContent = `Presenter Mode : ${
-      this.presentationMode ? "ON" : "OFF"
-    }`;
   }
 
   /**
@@ -65,7 +62,7 @@ class App {
       logoutButton.style.display = "inline-flex";
       colorControl.style.display = "flex";
     } else {
-      login.style.visibility = "visible";
+      login.style.display = "block";
       logoutButton.style.display = "none";
     }
   }
