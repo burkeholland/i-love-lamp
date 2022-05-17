@@ -6,21 +6,17 @@ const login = $("#login");
 const goButton = $("#goButton");
 const colorInput = $("#colorInput");
 const currentColor = $("#currentColor");
+const bulb = $("#bulb");
 const colorControl = $("#colorControl");
 const logoutButton = $("#logoutButton");
-const presenterModeAnchor = $("#presenterModeAnchor");
-const presenterModeSpan = $("#presenterModeSpan");
 let clientPrincipal = null;
 
 class App {
-  presentationMode = localStorage.getItem("presentationMode");
+  presentationMode = localStorage.getItem("presentationMode") || false;
   /**
    * Initalize the page and websocket connection
    */
   async init() {
-    // are we in presentation mode?
-    presenterModeSpan.textContent = this.presentationMode ? "ON" : "OFF";
-
     // are we logged in?
     await this.setLoginState();
 
@@ -41,11 +37,12 @@ class App {
       this.setColor(color);
     });
 
-    presenterModeAnchor.addEventListener("click", (e) => {
+    // double-clicking the bulb puts the app in presentation mode
+    // where usernames will not be shown
+    bulb.addEventListener("dblclick", () => {
       this.presentationMode = !this.presentationMode;
       localStorage.setItem("presentationMode", this.presentationMode);
-      presenterModeSpan.textContent = this.presentationMode ? "ON" : "OFF";
-      e.preventDefault();
+      alert(`Presentation mode is ${this.presentationMode ? "ON" : "OFF"}`);
     });
   }
 
@@ -62,7 +59,7 @@ class App {
       logoutButton.style.display = "inline-flex";
       colorControl.style.display = "flex";
     } else {
-      login.style.display = "block";
+      login.style.visibility = "visible";
       logoutButton.style.display = "none";
     }
   }
@@ -86,29 +83,24 @@ class App {
    */
   updateColor(color, userName, identityProvider) {
     // add a color circle
-    // bulb.style = `fill: #${color};`;
-    let displayName = this.presentationMode
-      ? `${identityProvider} user`
-      : userName;
-    let today = this.getToday();
-    currentColor.innerHTML = `<strong>${displayName}</strong> set the color to <span class='is-bold' style='color: #${color}'>${color}</span> on ${today}`;
+    bulb.style = `fill: #${color};`;
+    let displayName = this.presentationMode ? identityProvider : userName;
+    currentColor.innerHTML = `<strong>${displayName}</strong> user set the color to <span class='has-background-white p-1' style='color: #${color}'>${color}</span>`;
   }
 
   /**
-   *
-   * Formatting dates in JavaScript is so long that getting the current
-   * date and time merits its own function
-   * @returns string
+   * Creates the color circle HTML element
+   * @param {string} color
    */
-  getToday() {
-    let date = new Date().toLocaleDateString("en-us", {
-      weekday: "long",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
+  createColumn(color) {
+    let column = document.createElement("div");
+    column.className = "column is-1 pastColor drop";
+    column.style = `background-color: #${color}`;
+    column.addEventListener("click", () => {
+      this.setColor(color);
     });
-    let time = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`;
-    return `${date} at ${time}`;
+
+    return column;
   }
 }
 
