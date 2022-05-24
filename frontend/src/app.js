@@ -85,7 +85,7 @@ class App {
     // add a color circle
     bulb.style = `fill: #${color};`;
     let displayName = this.presentationMode ? identityProvider : userName;
-    currentColor.innerHTML = `<strong>${displayName}</strong> user set the color to <span class='has-background-white p-1' style='color: #${color}'>${color}</span>`;
+    currentColor.innerHTML = `<strong>${displayName}</strong> set the color to <span class='has-background-white p-1' style='color: #${color}'>${color}</span>`;
   }
 
   /**
